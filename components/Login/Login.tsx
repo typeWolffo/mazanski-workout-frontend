@@ -11,10 +11,8 @@ import { useRouter } from "next/router";
 import { memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  currentFormState,
-  setFormState,
-} from "../../redux/slices/initialFormSlice";
+import { useAuthContext } from "../../context/authContext";
+import { setFormState } from "../../redux/slices/initialFormSlice";
 import ApiClient from "../../services/apiService";
 import { UserCredentials } from "../../types/userCredentials";
 
@@ -22,8 +20,7 @@ function Login() {
   const apiClient = new ApiClient();
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const { formState } = useSelector(currentFormState);
+  const { setUserToken } = useAuthContext();
 
   const {
     handleSubmit,
@@ -31,14 +28,13 @@ function Login() {
     formState: { errors, isSubmitting },
   } = useForm<UserCredentials>();
 
-  useEffect(() => {
-    if (localStorage.getItem("mazanski-token")) router.push("/home");
-  }, []);
-
   const onSubmit = handleSubmit((data) =>
     apiClient.login(data).then((response) => {
-      if (response.status === 201) {
-        router.push("/home");
+      const token = response.data.access_token;
+
+      if (token) {
+        setUserToken(token);
+        router.push("/dashboard");
       }
     })
   );
@@ -46,7 +42,7 @@ function Login() {
   const handleChangeForm = () => dispatch(setFormState("register"));
 
   return (
-    <ScaleFade initialScale={0.7} in>
+    <ScaleFade initialScale={0.4} in>
       <Box
         className="absolute flex z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         color="#fff"
@@ -64,7 +60,11 @@ function Login() {
               marginBottom={8}
             >
               <FormLabel>Username</FormLabel>
-              <Input placeholder="Username" {...register("username")} />
+              <Input
+                placeholder="Username"
+                {...register("username")}
+                borderColor="brand.light"
+              />
             </FormControl>
 
             <FormControl
@@ -77,6 +77,7 @@ function Login() {
                 type="password"
                 placeholder="Password"
                 {...register("password")}
+                borderColor="brand.light"
               />
             </FormControl>
 

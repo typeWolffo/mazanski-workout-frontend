@@ -1,4 +1,4 @@
-function Home() {
+function Dashboard() {
   return (
     <div>
       <span>home</span>
@@ -6,4 +6,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Dashboard;

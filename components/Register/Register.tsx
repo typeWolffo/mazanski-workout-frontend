@@ -9,7 +9,7 @@ import {
   ScaleFade,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { setFormState } from "../../redux/slices/initialFormSlice";
@@ -25,6 +25,9 @@ type RegisterCredentials = {
 function Register() {
   const apiClient = new ApiClient();
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => setIsMounted(true), []);
 
   const {
     handleSubmit,
@@ -49,7 +52,7 @@ function Register() {
   const handleChangeForm = () => dispatch(setFormState("login"));
 
   return (
-    <ScaleFade initialScale={0.7} in>
+    <ScaleFade initialScale={0.7} in={isMounted}>
       <Box
         className="absolute flex z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         color="#fff"
@@ -67,12 +70,20 @@ function Register() {
               marginBottom={8}
             >
               <FormLabel>Username</FormLabel>
-              <Input placeholder="Username" {...register("username")} />
+              <Input
+                placeholder="Username"
+                {...register("username")}
+                borderColor="brand.light"
+              />
             </FormControl>
 
             <FormControl isRequired isInvalid={!!errors.mail} marginBottom={8}>
               <FormLabel>Mail</FormLabel>
-              <Input placeholder="Mail" {...register("mail")} />
+              <Input
+                placeholder="Mail"
+                {...register("mail")}
+                borderColor="brand.light"
+              />
             </FormControl>
 
             <FormControl
@@ -85,6 +96,7 @@ function Register() {
                 type="password"
                 placeholder="Password"
                 {...register("password")}
+                borderColor="brand.light"
               />
             </FormControl>
 
@@ -92,12 +104,14 @@ function Register() {
               isRequired
               isInvalid={!!errors.confirmedPassword}
               marginBottom={8}
+              borderColor="brand.light"
             >
               <FormLabel>Confirm Password</FormLabel>
               <Input
                 type="password"
                 placeholder="Confirm password"
                 {...register("confirmedPassword")}
+                borderColor="brand.light"
               />
             </FormControl>
 

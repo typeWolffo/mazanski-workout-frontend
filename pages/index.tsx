@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { memo } from "react";
 import { useSelector } from "react-redux";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -34,4 +35,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

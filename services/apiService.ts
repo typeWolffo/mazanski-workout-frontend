@@ -18,9 +18,6 @@ class ApiClient {
 
   async login(userData: UserCredentials) {
     const response = await this.instance.post("auth/login", userData);
-    if (response.status === 201) {
-      localStorage.setItem("mazanski-token", response.data.access_token);
-    }
     return response;
   }
 

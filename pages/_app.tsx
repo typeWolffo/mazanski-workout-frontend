@@ -2,6 +2,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import type { AppInitialProps, AppProps } from "next/app";
 import { wrapper } from "../redux/store";
 import "../styles/globals.css";
+import { AuthProvider } from "../context/authContext";
 
 const colors = {
   brand: {
@@ -23,7 +24,9 @@ const theme = extendTheme({ colors, fonts });
 function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </ChakraProvider>
   );
 }
